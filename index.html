@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>France vs Morocco — 2026 World Cup QF</title>
+<style>
+:root{--bg:#060810;--c:#0e1222;--c2:#161c30;--fr:#1F5AC8;--frl:#6098F0;--ma:#C1272D;--mal:#F06070;--g:#D4A843;--gd:#d4a84310;--w:#EAECF0;--s:#607080;--xs:#252d40;--r:14px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--w);font-family:'Segoe UI','Microsoft YaHei',system-ui;min-height:100vh}
+#starsCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+nav{position:sticky;top:0;z-index:100;background:rgba(6,8,16,.95);backdrop-filter:blur(24px);border-bottom:1px solid var(--xs);padding:0 20px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+nav .logo{font-size:16px;font-weight:800;display:flex;align-items:center;gap:10px}
+nav .logo .fc{color:var(--frl)}nav .logo .mc{color:var(--mal)}nav .logo .vs{color:var(--s);font-size:11px}
+nav .tabs{display:flex;gap:1px;flex-wrap:wrap}
+nav .tab{padding:14px 15px;border:none;background:none;color:var(--s);font-size:12px;cursor:pointer;transition:all .25s;font-family:inherit;border-bottom:2px solid transparent;white-space:nowrap}
+nav .tab:hover{color:var(--w)}nav .tab.active{color:var(--g);border-bottom-color:var(--g)}
+main{position:relative;z-index:1;max-width:1320px;margin:0 auto;padding:16px 20px 60px}
+.tab-content{display:none}.tab-content.active{display:block}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(212,168,67,.35)}50%{box-shadow:0 0 0 12px rgba(212,168,67,0)}}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s,transform .6s}
+.reveal.show{opacity:1;transform:translateY(0)}
+
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.card{background:var(--c);border-radius:var(--r);padding:18px 22px;border:1px solid rgba(255,255,255,.04);transition:.3s}
+.card:hover{border-color:rgba(255,255,255,.07)}
+.card.ft{border-top:3px solid var(--fr)}.card.mt{border-top:3px solid var(--ma)}
+.st{font-size:15px;font-weight:700;text-align:center;margin-bottom:4px}
+.ss{font-size:10px;color:var(--s);text-align:center;margin-bottom:8px}
+
+.av-wrap{display:flex;justify-content:center;margin-bottom:4px}
+.flip-wrap{perspective:1000px;cursor:pointer;min-height:240px}
+.flip-inner{position:relative;width:100%;transition:transform .6s;transform-style:preserve-3d}
+.flip-wrap.flipped .flip-inner{transform:rotateY(180deg)}
+.flip-front,.flip-back{backface-visibility:hidden;border-radius:var(--r)}
+.flip-front{background:var(--c2);border:1px solid rgba(255,255,255,.04);padding:16px;text-align:center;min-height:240px}
+.flip-back{position:absolute;inset:0;background:var(--c2);border:1px solid rgba(255,255,255,.04);padding:14px;transform:rotateY(180deg);display:flex;flex-direction:column;justify-content:center}
+.pname{font-size:13px;font-weight:700;margin-top:2px}.prole{font-size:9px;color:var(--s);margin:2px 0}.pstat{font-size:9px;color:var(--s);line-height:1.5}.pov{font-size:18px;font-weight:900;color:var(--g);margin-top:6px}.fhint{font-size:8px;color:var(--g);margin-top:4px;opacity:.7}
+
+.arow{display:flex;align-items:center;margin:3px 0;gap:6px}
+.albl{width:44px;font-size:8px;color:var(--s);text-align:right;flex-shrink:0}
+.abar{flex:1;height:9px;border-radius:4px;background:rgba(255,255,255,.03);overflow:hidden}
+.afill{height:100%;border-radius:4px;transition:width 1s ease}
+.afill.fr{background:linear-gradient(90deg,#001a4a,var(--frl))}
+.afill.ma{background:linear-gradient(90deg,#4a080c,var(--mal))}
+.aval{width:20px;font-size:8.5px;font-weight:700;text-align:left}
+
+.pitch-box{position:relative;background:linear-gradient(180deg,rgba(30,100,30,.08),rgba(30,100,30,.16),rgba(30,100,30,.08));border-radius:12px;padding:14px 8px;margin:10px 0;border:2px solid rgba(255,255,255,.05);overflow:hidden}
+.pitch-box .pl{position:absolute;left:50%;top:0;bottom:0;width:1px;background:rgba(255,255,255,.06)}
+.pitch-box .pc{position:absolute;left:50%;top:50%;width:70px;height:70px;border:1.5px solid rgba(255,255,255,.08);border-radius:50%;transform:translate(-50%,-50%)}
+.prow{display:flex;justify-content:space-around;margin:3px 0;position:relative;z-index:2}
+.pb{text-align:center;padding:5px 3px 4px;border-radius:10px;width:78px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.04);transition:all .25s;cursor:pointer;position:relative}
+.pb:hover{background:rgba(255,255,255,.08);transform:translateY(-3px);z-index:5;box-shadow:0 8px 20px rgba(0,0,0,.4)}
+.pb.star{border-color:rgba(212,168,67,.4);background:var(--gd)}
+.pb .nm{font-size:9px;font-weight:700;margin-top:2px}.pb .ps{font-size:7.5px;color:var(--s)}.pb .vl{font-size:7.5px;color:var(--g);margin-top:1px}
+.pb .tip{display:none;position:absolute;bottom:calc(100%+8px);left:50%;transform:translateX(-50%);background:var(--c2);border:1px solid var(--xs);border-radius:6px;padding:5px 10px;font-size:9px;white-space:nowrap;z-index:10;pointer-events:none}
+.pb:hover .tip{display:block}
+.subs-bar{font-size:8.5px;color:var(--xs);padding-top:5px;margin-top:5px;border-top:1px solid rgba(255,255,255,.04)}
+
+.h2h-g{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:6px 0}
+.h2h-i{text-align:center;padding:8px;border-radius:8px;background:rgba(255,255,255,.02);transition:.25s}
+.h2h-i:hover{background:rgba(255,255,255,.05);transform:scale(1.03)}
+.h2h-i .hv{font-size:26px;font-weight:900}.h2h-i .hl{font-size:8px;color:var(--s);margin-top:2px}
+
+.prow-bar{display:flex;align-items:center;margin:5px 0;gap:8px}
+.prow-name{width:100px;font-size:9.5px;color:var(--s);text-align:right;flex-shrink:0}
+.prow-bw{flex:1;height:15px;border-radius:7px;background:rgba(255,255,255,.03);overflow:hidden}
+.prow-b{height:100%;border-radius:7px;transition:width 1.2s ease}
+.prow-b.f{background:var(--fr)}.prow-b.d{background:var(--g)}.prow-b.m{background:var(--ma)}
+.prow-pct{width:44px;font-size:10px;font-weight:700;flex-shrink:0}
+
+.srow{display:flex;align-items:center;margin:5px 0;gap:8px}
+.slbl{width:105px;font-size:9px;color:var(--s);text-align:right;flex-shrink:0}
+.sbw{flex:1;display:flex;flex-direction:column;gap:2px}
+.sb{height:10px;border-radius:5px;display:flex;align-items:center;padding-left:5px;font-size:7.5px;font-weight:700;color:#fff;transition:width 1s ease}
+.sb.f{background:linear-gradient(90deg,#001a4a,var(--fr))}.sb.m{background:linear-gradient(90deg,#4a080c,var(--ma))}
+
+.cd-bar{display:flex;justify-content:center;gap:14px;margin:12px 0 16px}
+.cd-i{text-align:center;min-width:60px;padding:10px 14px;background:var(--c);border-radius:12px;border:1px solid rgba(255,255,255,.05)}
+.cd-i .n{font-size:30px;font-weight:900;color:var(--g);font-family:'Courier New',monospace}
+.cd-i .l{font-size:8px;color:var(--s);letter-spacing:2px;text-transform:uppercase}
+.pred{display:inline-block;padding:10px 24px;border-radius:20px;background:var(--gd);border:1px solid rgba(212,168,67,.2);color:var(--g);font-size:13px;font-weight:700}
+
+.m-row{display:flex;align-items:center;padding:8px 10px;margin:3px 0;border-radius:8px;background:rgba(255,255,255,.015);gap:8px;transition:.25s}
+.m-row:hover{background:rgba(255,255,255,.04);transform:translateX(3px)}
+.m-row .rb{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#fff;flex-shrink:0}
+.m-row .rb.w{background:rgba(72,180,96,.55)}.m-row .rb.d{background:rgba(200,180,100,.55)}
+.m-row .rd{font-size:8.5px;color:var(--s);width:36px;flex-shrink:0}.m-row .rc{font-size:7.5px;color:var(--xs);width:65px;flex-shrink:0}
+.m-row .rm{font-size:10.5px;color:var(--w);flex:1}
+
+.sparkline{display:flex;align-items:flex-end;gap:6px;height:40px;justify-content:center;margin:8px 0}
+.spb{width:16px;border-radius:4px 4px 0 0;min-height:2px;transition:height .8s ease}
+
+.trophy-g{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:6px 0}
+.trophy-i{text-align:center;padding:8px 4px;border-radius:8px;background:rgba(255,255,255,.015);transition:.25s}
+.trophy-i:hover{background:rgba(255,255,255,.05);transform:translateY(-2px)}
+.trophy-i .tn{font-size:20px;font-weight:900;color:var(--g)}.trophy-i .tl{font-size:7.5px;color:var(--s);margin-top:2px;line-height:1.2}
+
+.h-row{display:flex;align-items:center;padding:7px 10px;margin:3px 0;border-radius:8px;background:rgba(255,255,255,.015);gap:10px;transition:.25s}
+.h-row:hover{background:rgba(255,255,255,.04);transform:translateX(3px)}
+.h-row .hc{font-size:13px;font-weight:900;color:var(--g);width:32px;text-align:center;flex-shrink:0}
+.h-row .ht{font-size:11px;font-weight:700}.h-row .hd{font-size:8.5px;color:var(--s)}
+
+.timeline{position:relative;padding-left:26px}
+.timeline::before{content:'';position:absolute;left:10px;top:4px;bottom:4px;width:2px;background:rgba(255,255,255,.06);border-radius:1px}
+.tl-i{position:relative;padding:6px 8px;margin:3px 0;border-radius:6px;background:rgba(255,255,255,.015);transition:.25s;font-size:10px}
+.tl-i:hover{background:rgba(255,255,255,.04)}
+.tl-i::before{content:'';position:absolute;left:-20px;top:12px;width:7px;height:7px;border-radius:50%;border:2px solid var(--g);background:var(--bg)}
+
+.poll-o{padding:10px 16px;margin:5px 0;border-radius:10px;cursor:pointer;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.04);transition:all .25s;display:flex;align-items:center;gap:10px}
+.poll-o:hover{background:rgba(255,255,255,.06);transform:translateX(4px)}
+.poll-o.sel{border-color:var(--g)!important;background:var(--gd)!important}
+.poll-o .pi{font-size:24px;width:36px;text-align:center;flex-shrink:0}
+
+.stat-tile{text-align:center;padding:10px;border-radius:10px;background:rgba(255,255,255,.02);transition:.25s}
+.stat-tile:hover{background:rgba(255,255,255,.05)}
+.stat-tile .stn{font-size:22px;font-weight:900}.stat-tile .stl{font-size:8px;color:var(--s);margin-top:2px}
+
+.fmt-label{display:inline-block;padding:4px 12px;border-radius:6px;font-size:10px;font-weight:700;color:#fff;margin-bottom:6px}
+.fmt-label.fr{background:var(--fr)}.fmt-label.ma{background:var(--ma)}
+
+.hero{text-align:center;padding:16px 0 20px}
+.hero .tag{font-size:10px;letter-spacing:6px;color:var(--g)}
+.hero h1{font-size:27px;font-weight:800;margin:4px 0 2px}
+.hero .sub{font-size:11px;color:var(--s)}
+.hero .vs-line{display:flex;justify-content:center;align-items:center;gap:26px;margin-top:12px}
+.hero .vs-line .tn{font-size:44px;font-weight:900}
+.hero .vs-line .tn.fr{color:var(--frl)}.hero .vs-line .tn.ma{color:var(--mal)}
+.hero .vs-line .vs-badge{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:var(--s);border:2px solid var(--xs);background:rgba(255,255,255,.03);animation:pulse 2s infinite}
+
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);z-index:200;background:var(--c2);border:1px solid var(--g);color:var(--g);padding:10px 24px;border-radius:20px;font-size:12px;font-weight:700;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.show{opacity:1}
+
+@media(max-width:900px){.g2,.g3,.g4{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<canvas id="starsCanvas"></canvas>
+
+<nav>
+  <div class="logo"><span class="fc">FRANCE</span><span class="vs">vs</span><span class="mc">MOROCCO</span></div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('overview')">Overview</button>
+    <button class="tab" onclick="switchTab('squad')">Squad</button>
+    <button class="tab" onclick="switchTab('stars')">Stars</button>
+    <button class="tab" onclick="switchTab('form')">Form</button>
+    <button class="tab" onclick="switchTab('history')">Honors</button>
+    <button class="tab" onclick="switchTab('poll')">Vote</button>
+  </div>
+</nav>
+
+<main>
+<!-- ═══════════ OVERVIEW ═══════════ -->
+<div class="tab-content active" id="tab-overview">
+  <div class="hero"><div class="tag">FIFA World Cup 2026 · Quarter-Final</div><div class="vs-line"><div class="tn fr">FRANCE</div><div class="vs-badge">VS</div><div class="tn ma">MOROCCO</div></div><div class="sub">July 10, 2026 · 4:00 AM CST (Beijing) · 20:00 UTC · Gillette Stadium</div></div>
+  <div class="cd-bar"><div class="cd-i"><div class="n" id="cd-d">--</div><div class="l">Days</div></div><div class="cd-i"><div class="n" id="cd-h">--</div><div class="l">Hours</div></div><div class="cd-i"><div class="n" id="cd-m">--</div><div class="l">Minutes</div></div><div class="cd-i"><div class="n" id="cd-s">--</div><div class="l">Seconds</div></div></div>
+  <div style="text-align:center"><span class="pred">PREDICTION: France 2 — 1 Morocco · Opta: France 60.9%</span></div>
+
+  <div class="g2" style="margin-top:16px">
+    <div class="card reveal"><div class="st">Team Strength Radar</div><div class="ss">Hover dots for values</div><div style="display:flex;justify-content:center"><svg viewBox="0 0 300 300" width="300" height="300" id="radar-svg"><g transform="translate(150,150)" id="radar-g"></g><rect x="8" y="276" width="11" height="7" rx="3" fill="#6098F0"/><text x="23" y="283" fill="#aaa" font-size="8">France</text><rect x="74" y="276" width="11" height="7" rx="3" fill="#F06070"/><text x="89" y="283" fill="#aaa" font-size="8">Morocco</text></svg></div></div>
+    <div class="card reveal"><div class="st">Head-to-Head & Prediction</div><div class="ss">6 meetings · France undefeated</div>
+      <div class="h2h-g"><div class="h2h-i"><div class="hv" style="color:#aaa">6</div><div class="hl">Total Matches</div></div><div class="h2h-i"><div class="hv" style="color:var(--frl)">4</div><div class="hl">France Wins</div></div><div class="h2h-i"><div class="hv" style="color:#ccc">2</div><div class="hl">Draws</div></div><div class="h2h-i"><div class="hv" style="color:var(--mal)">0</div><div class="hl">Morocco Wins</div></div></div>
+      <div style="text-align:center;font-size:9px;color:var(--s);margin:4px 0">2022 WC SF: France 2 — 0 Morocco</div><hr style="border-color:var(--xs);margin:8px 0">
+      <div class="st" style="font-size:12px">Win Probability (Opta)</div>
+      <div class="prow-bar"><div class="prow-name">France</div><div class="prow-bw"><div class="prow-b f" data-w="60.9"></div></div><div class="prow-pct" style="color:var(--frl)">60.9%</div></div>
+      <div class="prow-bar"><div class="prow-name">Extra Time</div><div class="prow-bw"><div class="prow-b d" data-w="22.2"></div></div><div class="prow-pct" style="color:var(--g)">22.2%</div></div>
+      <div class="prow-bar"><div class="prow-name">Morocco</div><div class="prow-bw"><div class="prow-b m" data-w="16.9"></div></div><div class="prow-pct" style="color:var(--mal)">16.9%</div></div>
+    </div>
+  </div>
+
+  <div class="card reveal" style="margin-top:14px"><div class="st">Key Statistics</div><div class="ss">France blue · Morocco red</div>
+    <div class="srow"><div class="slbl">Goals Scored</div><div class="sbw"><div class="sb f" data-w="65">13</div><div class="sb m" data-w="35">7</div></div></div>
+    <div class="srow"><div class="slbl">Possession %</div><div class="sbw"><div class="sb f" data-w="58">58%</div><div class="sb m" data-w="47">47%</div></div></div>
+    <div class="srow"><div class="slbl">Pass Accuracy</div><div class="sbw"><div class="sb f" data-w="89">89%</div><div class="sb m" data-w="82">82%</div></div></div>
+    <div class="srow"><div class="slbl">Shots on Target</div><div class="sbw"><div class="sb f" data-w="80">28</div><div class="sb m" data-w="43">15</div></div></div>
+    <div class="srow"><div class="slbl">Win Streak</div><div class="sbw"><div class="sb f" data-w="50">7</div><div class="sb m" data-w="71">10</div></div></div>
+    <div class="srow"><div class="slbl">FIFA Rank</div><div class="sbw"><div class="sb f" data-w="95">#1</div><div class="sb m" data-w="30">#14</div></div></div>
+    <div class="srow"><div class="slbl">Value (x100M EUR)</div><div class="sbw"><div class="sb f" data-w="79">11.8</div><div class="sb m" data-w="25">3.8</div></div></div>
+  </div>
+  <div class="g3" style="margin-top:14px" id="ov-players"></div>
+</div>
+
+<!-- ═══════════ SQUAD ═══════════ -->
+<div class="tab-content" id="tab-squad">
+  <div class="hero"><div class="tag">Lineup & Formation</div><h1>Squad Analysis · 阵容分析</h1><div class="sub">Hover any player for details</div></div>
+  <div class="g2" id="squad-cards"></div>
+  <div class="g2" style="margin-top:14px">
+    <div class="card ft reveal"><div style="font-size:13px;font-weight:700;color:var(--frl);text-align:center;margin-bottom:8px">FRANCE Team Profile</div><div class="g4"><div class="stat-tile"><div class="stn" style="color:var(--frl)">1.18B</div><div class="stl">Market Value (EUR)</div></div><div class="stat-tile"><div class="stn" style="color:var(--w)">26.4</div><div class="stl">Average Age</div></div><div class="stat-tile"><div class="stn" style="color:var(--g)">16</div><div class="stl">WC Appearances</div></div><div class="stat-tile"><div class="stn" style="color:var(--frl)">2x</div><div class="stl">World Cup Titles</div></div></div></div>
+    <div class="card mt reveal"><div style="font-size:13px;font-weight:700;color:var(--mal);text-align:center;margin-bottom:8px">MOROCCO Team Profile</div><div class="g4"><div class="stat-tile"><div class="stn" style="color:var(--mal)">380M</div><div class="stl">Market Value (EUR)</div></div><div class="stat-tile"><div class="stn" style="color:var(--w)">27.1</div><div class="stl">Average Age</div></div><div class="stat-tile"><div class="stn" style="color:var(--g)">7</div><div class="stl">WC Appearances</div></div><div class="stat-tile"><div class="stn" style="color:var(--mal)">1st</div><div class="stl">African WC SF</div></div></div></div>
+  </div>
+</div>
+
+<!-- ═══════════ STARS ═══════════ -->
+<div class="tab-content" id="tab-stars">
+  <div class="hero"><div class="tag">Player Comparison</div><h1>Star Players · 球星对决</h1><div class="sub">Click any card to flip — see full attributes on the back</div></div>
+  <div class="g3" id="stars-g"></div>
+</div>
+
+<!-- ═══════════ FORM ═══════════ -->
+<div class="tab-content" id="tab-form">
+  <div class="hero"><div class="tag">Match History</div><h1>Recent Form · 近期战绩</h1><div class="sub">Last 7 matches — all competitions</div></div>
+  <div class="g2" id="form-g"></div>
+  <div class="card reveal" style="margin-top:14px"><div class="st">Goal Performance</div><div class="ss">Scored & conceded in last 7 matches</div>
+    <div class="g2" style="margin-top:8px">
+      <div class="card ft"><div style="font-size:12px;font-weight:700;color:var(--frl);margin-bottom:8px">France — Attacking</div><div class="srow"><div class="slbl">Goals Scored</div><div class="sbw"><div class="sb f" data-w="100">20</div></div></div><div class="srow"><div class="slbl">Conceded</div><div class="sbw"><div class="sb f" data-w="15">3</div></div></div><div class="srow"><div class="slbl">Clean Sheets</div><div class="sbw"><div class="sb f" data-w="75">4</div></div></div><div class="srow"><div class="slbl">Avg Goals/game</div><div class="sbw"><div class="sb f" data-w="90">2.86</div></div></div></div>
+      <div class="card mt"><div style="font-size:12px;font-weight:700;color:var(--mal);margin-bottom:8px">Morocco — Defensive</div><div class="srow"><div class="slbl">Goals Scored</div><div class="sbw"><div class="sb m" data-w="50">10</div></div></div><div class="srow"><div class="slbl">Conceded</div><div class="sbw"><div class="sb m" data-w="10">2</div></div></div><div class="srow"><div class="slbl">Clean Sheets</div><div class="sbw"><div class="sb m" data-w="90">5</div></div></div><div class="srow"><div class="slbl">Avg Goals/game</div><div class="sbw"><div class="sb m" data-w="50">1.43</div></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ HISTORY ═══════════ -->
+<div class="tab-content" id="tab-history">
+  <div class="hero"><div class="tag">Legacy & Records</div><h1>Historical Achievements · 历史荣誉</h1><div class="sub">All-time trophies, records & World Cup history</div></div>
+  <div class="g2" id="hist-g"></div>
+  <div class="card reveal" style="margin-top:14px"><div class="st">World Cup Journey · 世界杯征程</div><div class="ss">Performance at every World Cup</div><div class="g2"><div><div style="font-size:12px;font-weight:700;color:var(--frl);margin:8px 0">France — 16 Appearances</div><div class="timeline" id="fr-tl"></div></div><div><div style="font-size:12px;font-weight:700;color:var(--mal);margin:8px 0">Morocco — 7 Appearances</div><div class="timeline" id="ma-tl"></div></div></div></div>
+  <div class="card reveal" style="margin-top:14px"><div class="st">Head-to-Head Record · 交锋全记录</div><div class="ss">Every France vs Morocco encounter</div>
+    <div class="g2" style="margin-top:8px">
+      <div class="card"><div class="st" style="text-align:left;font-size:13px;color:var(--g)">All 6 Meetings</div><div class="m-row"><div class="rb w">W</div><div class="rd">2022</div><div class="rc">WC SF</div><div class="rm">France 2 — 0 Morocco</div></div><div class="m-row"><div class="rb">D</div><div class="rd">2007</div><div class="rc">Friendly</div><div class="rm">France 2 — 2 Morocco</div></div><div class="m-row"><div class="rb w">W</div><div class="rd">1999</div><div class="rc">Friendly</div><div class="rm">France 1 — 0 Morocco</div></div><div class="m-row"><div class="rb">D</div><div class="rd">1998</div><div class="rc">Friendly</div><div class="rm">Morocco 2 — 2 France</div></div><div class="m-row"><div class="rb w">W</div><div class="rd">1988</div><div class="rc">Friendly</div><div class="rm">France 2 — 1 Morocco</div></div><div class="m-row"><div class="rb w">W</div><div class="rd">1963</div><div class="rc">Friendly</div><div class="rm">France 4 — 1 Morocco</div></div></div>
+      <div class="card"><div class="st" style="text-align:left;font-size:13px;color:var(--g)">Summary</div><div style="margin-top:8px"><div class="srow"><div class="slbl">France Wins</div><div class="sbw"><div class="sb f" data-w="67">4</div></div></div><div class="srow"><div class="slbl">Draws</div><div class="sbw"><div class="sb" style="background:var(--xs);width:0%" data-w="33">2</div></div></div><div class="srow"><div class="slbl">Morocco Wins</div><div class="sbw"><div class="sb m" data-w="0">0</div></div></div><div class="srow"><div class="slbl">France Goals</div><div class="sbw"><div class="sb f" data-w="12">12</div></div></div><div class="srow"><div class="slbl">Morocco Goals</div><div class="sbw"><div class="sb m" data-w="6">6</div></div></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ POLL ═══════════ -->
+<div class="tab-content" id="tab-poll">
+  <div class="hero"><div class="tag">Fan Engagement</div><h1>Fan Poll · 球迷投票</h1><div class="sub">Who will win? Cast your vote!</div></div>
+  <div class="g2">
+    <div class="card ft reveal">
+      <div class="st" style="font-size:15px">Who Will Win?</div><div class="ss">Click an option to vote (saved in your browser)</div>
+      <div id="poll-opts">
+        <div class="poll-o" data-v="fr"><div class="pi">&#127467;&#127479;</div><div style="flex:1"><div style="font-weight:700;color:var(--frl);font-size:13px">France</div><div style="font-size:9px;color:var(--s)">Win in 90 minutes</div></div></div>
+        <div class="poll-o" data-v="draw"><div class="pi">&#129309;</div><div style="flex:1"><div style="font-weight:700;color:var(--g);font-size:13px">Draw / Extra Time</div><div style="font-size:9px;color:var(--s)">Goes beyond 90 minutes</div></div></div>
+        <div class="poll-o" data-v="ma"><div class="pi">&#127474;&#127462;</div><div style="flex:1"><div style="font-weight:700;color:var(--mal);font-size:13px">Morocco</div><div style="font-size:9px;color:var(--s)">Win in 90 minutes</div></div></div>
+      </div>
+      <div id="poll-res" style="margin-top:10px"></div>
+    </div>
+    <div class="card mt reveal" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center">
+      <div style="font-size:56px;margin-bottom:10px" id="poll-icon">&#127942;</div>
+      <div style="font-size:16px;font-weight:700" id="poll-msg">Cast your vote!<br><span style="font-size:11px;color:var(--s)">投出你的一票！</span></div>
+      <div style="font-size:8px;color:var(--s);margin-top:8px">Votes stored in your browser</div>
+      <div style="margin-top:10px;font-size:9px;color:var(--xs)">Total: <span id="poll-total" style="color:var(--g);font-weight:700">0</span> votes</div>
+    </div>
+  </div>
+  <div class="g3 reveal" style="margin-top:14px" id="facts-g"></div>
+</div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════ Starfield ═══════════
+const cv=document.getElementById('starsCanvas'),cx=cv.getContext('2d');let stars=[];
+function rc(){cv.width=innerWidth;cv.height=innerHeight}
+rc();addEventListener('resize',rc);
+for(let i=0;i<150;i++)stars.push({x:Math.random()*2000,y:Math.random()*1500,r:Math.random()*1.5+.3,s:Math.random()*.4+.08,a:Math.random()*Math.PI*2});
+(function A(){cx.clearRect(0,0,cv.width,cv.height);stars.forEach(s=>{s.a+=s.s*.015;cx.fillStyle='rgba(255,255,255,'+(.1+.08*Math.sin(s.a))+')';cx.beginPath();cx.arc(s.x,s.y,s.r,0,Math.PI*2);cx.fill()});requestAnimationFrame(A)})();
+
+// ═══════════ Tab switching (SIMPLE + RELIABLE) ═══════════
+function switchTab(id){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelector('.tab[onclick*="'+id+'"]').classList.add('active');
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  setTimeout(()=>{
+    document.querySelectorAll('#tab-'+id+' .reveal').forEach(r=>r.classList.add('show'));
+    document.querySelectorAll('#tab-'+id+' [data-w]').forEach(el=>el.style.width=el.dataset.w+'%');
+  },100);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ═══════════ Toast ═══════════
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000)}
+
+// ═══════════ Reveal on scroll ═══════════
+const IO=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('show');IO.unobserve(e.target)}})},{threshold:.12});
+setTimeout(()=>document.querySelectorAll('.reveal').forEach(r=>IO.observe(r)),200);
+
+// Animate bars on scroll
+const BO=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.querySelectorAll('[data-w]').forEach(el=>el.style.width=el.dataset.w+'%');BO.unobserve(e.target)}})},{threshold:.2});
+setTimeout(()=>{document.querySelectorAll('.card').forEach(c=>BO.observe(c));document.querySelectorAll('#tab-overview [data-w]').forEach(el=>el.style.width=el.dataset.w+'%');document.querySelectorAll('#tab-overview .reveal').forEach(r=>r.classList.add('show'))},300);
+
+// ═══════════ Countdown (fixed — match at 20:00 UTC Jul 9 = 4:00 AM Beijing Jul 10) ═══════════
+const MT=new Date('2026-07-09T20:00:00Z').getTime();
+function cd(){const d=MT-Date.now();const els={d:document.getElementById('cd-d'),h:document.getElementById('cd-h'),m:document.getElementById('cd-m'),s:document.getElementById('cd-s')};if(!els.d)return;if(d<=0){els.d.textContent='00';els.h.textContent='00';els.m.textContent='00';els.s.textContent='00';return}const ds=Math.floor(d/864e5),hs=Math.floor(d%864e5/36e5),ms=Math.floor(d%36e5/6e4),ss=Math.floor(d%6e4/1e3);els.d.textContent=String(ds).padStart(2,'0');els.h.textContent=String(hs).padStart(2,'0');els.m.textContent=String(ms).padStart(2,'0');els.s.textContent=String(ss).padStart(2,'0')}
+setInterval(cd,1000);cd();
+
+// ═══════════ SVG Avatar ═══════════
+function AV(name,side,jn,sz){sz=sz||56;const ini=name.split(' ').map(w=>w[0]).join('').slice(0,2);const isFR=side==='fr',b1=isFR?'#002395':'#C1272D',b2=isFR?'#1A5AC8':'#8B1A1F',lt=isFR?'#6098F0':'#F06070';const id='a'+Math.random().toString(36).slice(2,8);return'<svg width="'+sz+'" height="'+sz+'" viewBox="0 0 56 56"><defs><linearGradient id="'+id+'" x1="0" y1="0" x2="56" y2="56"><stop offset="0%" stop-color="'+b1+'"/><stop offset="100%" stop-color="'+b2+'"/></linearGradient><clipPath id="c'+id+'"><circle cx="28" cy="28" r="28"/></clipPath></defs><circle cx="28" cy="28" r="28" fill="url(#'+id+')" stroke="'+lt+'" stroke-width="2" opacity="0.95"/>'+(isFR?'<rect x="0" y="0" width="18.6" height="56" fill="#002395" opacity="0.55" clip-path="url(#c'+id+')"/><rect x="18.6" y="0" width="18.8" height="56" fill="#fff" opacity="0.35" clip-path="url(#c'+id+')"/><rect x="37.4" y="0" width="18.6" height="56" fill="#ED2939" opacity="0.35" clip-path="url(#c'+id+')"/>':'<rect x="0" y="0" width="56" height="56" fill="#C1272D" opacity="0.5" clip-path="url(#c'+id+')"/><polygon points="28,8 32,21 46,21 35,29 39,42 28,35 17,42 21,29 10,21 24,21" fill="#006233" opacity="0.4" clip-path="url(#c'+id+')" transform="scale(0.85) translate(4.2,4.2)"/>')+'<text x="28" y="50" text-anchor="middle" fill="#fff" font-size="20" font-weight="900">'+jn+'</text><rect x="10" y="38" width="36" height="2" rx="1" fill="#fff" opacity="0.45"/><text x="28" y="25" text-anchor="middle" fill="#fff" font-size="18" font-weight="900">'+ini+'</text><ellipse cx="20" cy="15" rx="14" ry="9" fill="#fff" opacity="0.08"/></svg>'}
+function AVS(name,side,jn,sz){sz=sz||44;const ini=name.split(' ').map(w=>w[0]).join('').slice(0,2);const isFR=side==='fr',b1=isFR?'#002395':'#C1272D',b2=isFR?'#1A5AC8':'#8B1A1F',lt=isFR?'#6098F0':'#F06070';const id='s'+Math.random().toString(36).slice(2,8);return'<svg width="'+sz+'" height="'+sz+'" viewBox="0 0 48 48"><defs><linearGradient id="'+id+'" x1="0" y1="0" x2="48" y2="48"><stop offset="0%" stop-color="'+b1+'"/><stop offset="100%" stop-color="'+b2+'"/></linearGradient></defs><circle cx="24" cy="24" r="24" fill="url(#'+id+')" stroke="'+lt+'" stroke-width="1.5"/><text x="24" y="40" text-anchor="middle" fill="#fff" font-size="15" font-weight="900">'+jn+'</text><text x="24" y="22" text-anchor="middle" fill="#fff" font-size="14" font-weight="900">'+ini+'</text><ellipse cx="17" cy="13" rx="11" ry="7" fill="#fff" opacity="0.08"/></svg>'}
+
+// ═══════════ Player Data ═══════════
+const frP=[{n:'K. Mbappe',num:'10',pos:'ST',val:'180M',st:true,at:{Pace:97,Shot:90,Pass:83,Dribble:92,Def:36,Phys:75},g:'7',a:'2',stat:'Tournament top scorer'},{n:'O. Dembele',num:'11',pos:'RW',val:'65M',st:true,at:{Pace:93,Shot:80,Pass:85,Dribble:91,Def:32,Phys:65},g:'3',a:'4',stat:'Dribble success 62%'},{n:'M. Olise',num:'7',pos:'AM',val:'75M',st:true,at:{Pace:82,Shot:79,Pass:90,Dribble:86,Def:42,Phys:68},g:'2',a:'5',stat:'18 key passes'},{n:'Maignan',num:'16',pos:'GK',val:'38M'},{n:'Kounde',num:'5',pos:'RB',val:'60M'},{n:'Upamecano',num:'2',pos:'CB',val:'50M'},{n:'Saliba',num:'17',pos:'CB',val:'80M'},{n:'Digne',num:'3',pos:'LB',val:'15M'},{n:'Kone',num:'8',pos:'CM',val:'45M'},{n:'Rabiot',num:'14',pos:'CM',val:'40M'},{n:'Tchouameni',num:'18',pos:'DM',val:'100M'},{n:'Barcola',num:'20',pos:'LW',val:'75M'}];
+const maP=[{n:'A. Hakimi',num:'2',pos:'RB',val:'60M',st:true,at:{Pace:91,Shot:72,Pass:80,Dribble:82,Def:78,Phys:80},g:'1',a:'1',stat:'Captain · 16 tackles'},{n:'A. Ounahi',num:'8',pos:'AM',val:'45M',st:true,at:{Pace:78,Shot:75,Pass:86,Dribble:83,Def:65,Phys:72},g:'2',a:'2',stat:'11.2 km per match'},{n:'B. Rahimi',num:'9',pos:'ST',val:'8M',st:true,at:{Pace:85,Shot:82,Pass:75,Dribble:80,Def:30,Phys:68},g:'3',a:'1',stat:'Shot accuracy 58%'},{n:'Bounou',num:'1',pos:'GK',val:'12M'},{n:'Diop',num:'4',pos:'CB',val:'15M'},{n:'Riad',num:'6',pos:'CB',val:'12M'},{n:'Mazraoui',num:'3',pos:'LB',val:'30M'},{n:'El Aynaoui',num:'15',pos:'DM',val:'8M'},{n:'Bouaddi',num:'22',pos:'DM',val:'10M'},{n:'Diaz',num:'7',pos:'RW',val:'35M'},{n:'El Khannouss',num:'10',pos:'LW',val:'25M'}];
+
+// ═══════════ Flip card helper ═══════════
+function flipCard(p,side,big){const sz=big?64:56,ov=Math.round(Object.values(p.at).reduce((a,b)=>a+b,0)/6);const d=document.createElement('div');d.className='flip-wrap';d.innerHTML='<div class="flip-inner"><div class="flip-front"><div class="av-wrap">'+AV(p.n,side,p.num,sz)+'</div><div class="pname">'+p.n+'</div><div class="prole">['+side.toUpperCase()+'] #'+p.num+' · '+p.pos+'</div><div class="pstat">'+p.g+'G · '+p.a+'A · EUR '+p.val+'<br>'+p.stat+'</div>'+(big?'<div class="pov">Overall: '+ov+'/100</div>':'')+'<div class="fhint">Click to flip</div></div><div class="flip-back">'+Object.entries(p.at).map(function(e){return'<div class="arow"><div class="albl">'+e[0]+'</div><div class="abar"><div class="afill '+side+'" style="width:'+e[1]+'%"></div></div><div class="aval">'+e[1]+'</div></div>'}).join('')+'<div class="pov" style="text-align:center">Overall: '+ov+'/100</div></div></div>';d.addEventListener('click',function(e){e.stopPropagation();this.classList.toggle('flipped')});return d}
+
+// ═══════════ BUILD: Overview key players ═══════════
+const ovG=document.getElementById('ov-players');
+[...frP.filter(function(p){return p.st}).map(function(p){p.side='fr';return p}),...maP.filter(function(p){return p.st}).map(function(p){p.side='ma';return p})].forEach(function(p){var c=flipCard(p,p.side,false);c.classList.add('reveal');ovG.appendChild(c)});
+
+// ═══════════ BUILD: Squad ═══════════
+(function(){
+  function pitchHTML(players,indices,side){var rows='';indices.forEach(function(row){rows+='<div class="prow">';row.forEach(function(i){var p=players[i],sc=p.st?' star':'',nm=p.st?' style="color:#FFD700"':'';rows+='<div class="pb'+sc+'"><div class="av-wrap">'+AVS(p.n,side,p.num)+'</div><div class="nm"'+nm+'>'+p.n+'</div><div class="ps">'+p.pos+'</div><div class="vl">EUR '+p.val+'</div><div class="tip">'+p.n+' · '+p.pos+' · EUR '+p.val+(p.st?' · KEY PLAYER':'')+'</div></div>'});rows+='</div>'});return rows}
+  var frXI=[[3],[4,5,6,7],[8,9,10],[1,0,11]].map(function(r){return r.map(function(i){return frP[i]})});
+  var maXI=[[3],[0,4,5,6],[7,8],[9,1,10],[2]].map(function(r){return r.map(function(i){return maP[i]})});
+  // Actually rebuild indices properly
+  var frIdx=[[3],[4,5,6,7],[8,9,10],[1,0,11]];
+  var maIdx=[[3],[0,4,5,6],[7,8],[9,1,10],[2]];
+  document.getElementById('squad-cards').innerHTML=
+    '<div class="card ft reveal"><div style="font-size:18px;font-weight:800;color:var(--frl);text-align:center">FRANCE</div><div style="text-align:center;font-size:10px;color:var(--s);margin:2px 0">Coach: <em style="color:var(--g)">D. Deschamps</em> · Value: <em style="color:var(--g)">EUR 1.18B</em> · Age: <em style="color:var(--g)">26.4</em></div><div style="text-align:center;margin:4px 0 6px"><span class="fmt-label fr">4-3-3</span></div><div class="pitch-box"><div class="pl"></div><div class="pc"></div>'+pitchHTML(frP,frIdx,'fr')+'</div><div class="subs-bar">Bench: M. Olise (AM) · Y. Fofana (CM) · W. Zaire-Emery (CM) · B. Pavard (RB) · L. Hernandez (LB) · A. Areola (GK)</div><div style="text-align:center;margin-top:6px;font-size:9px;font-weight:700;color:var(--frl)">Form: W W W W W D W · 6W 1D 0L · 20 GF : 3 GA</div></div>'+
+    '<div class="card mt reveal"><div style="font-size:18px;font-weight:800;color:var(--mal);text-align:center">MOROCCO</div><div style="text-align:center;font-size:10px;color:var(--s);margin:2px 0">Coach: <em style="color:var(--g)">W. Regragui</em> · Value: <em style="color:var(--g)">EUR 380M</em> · Age: <em style="color:var(--g)">27.1</em></div><div style="text-align:center;margin:4px 0 6px"><span class="fmt-label ma">4-2-3-1</span></div><div class="pitch-box"><div class="pl"></div><div class="pc"></div>'+pitchHTML(maP,maIdx,'ma')+'</div><div class="subs-bar">Bench: I. Saibari (AM)* · A. Adli (FW) · Y. Attiat-Allah (LB) · N. Aguerd (CB) · A. Ezzalzouli (LW) · M. Mohammadi (GK)</div><div style="text-align:center;margin-top:6px;font-size:9px;font-weight:700;color:var(--mal)">Form: W W D W W W D · 5W 2D 0L · 10 GF : 2 GA</div></div>';
+})();
+
+// ═══════════ BUILD: Stars ═══════════
+(function(){
+  var sg=document.getElementById('stars-g');
+  var all=[];
+  frP.forEach(function(p){if(p.st){p.side='fr';all.push(p)}});
+  maP.forEach(function(p){if(p.st){p.side='ma';all.push(p)}});
+  all.forEach(function(p){var c=flipCard(p,p.side,true);c.classList.add('reveal');sg.appendChild(c)});
+})();
+
+// ═══════════ BUILD: Form ═══════════
+(function(){
+  var fg=document.getElementById('form-g');
+  var data=[{side:'fr',label:'FRANCE',matches:[['Jul 6','WC R16','France 1 — 0 Paraguay','W'],['Jun 30','WC Group I','France 3 — 0 Iran','W'],['Jun 25','WC Group I','France 4 — 1 Jamaica','W'],['Jun 19','WC Group I','France 2 — 1 Norway','W'],['Jun 9','Friendly','France 3 — 0 Egypt','W'],['Mar 26','Friendly','France 2 — 2 Germany','D'],['Mar 22','Friendly','France 5 — 1 Ireland','W']],sum:'6W 1D 0L · 20 GF : 3 GA',trend:[5,3,4,2,3,2,5]},{side:'ma',label:'MOROCCO',matches:[['Jul 5','WC R16','Morocco 0 — 0 Netherlands (4-2 pen)','W'],['Jul 1','WC R32','Morocco 3 — 0 Canada','W'],['Jun 26','WC Group C','Morocco 1 — 1 Brazil','D'],['Jun 21','WC Group C','Morocco 2 — 0 Saudi Arabia','W'],['Jun 17','WC Group C','Morocco 1 — 0 Thailand','W'],['Jun 5','Friendly','Morocco 2 — 0 Senegal','W'],['Mar 25','Friendly','Morocco 1 — 1 Nigeria','D']],sum:'5W 2D 0L · 10 GF : 2 GA',trend:[0,3,1,2,1,2,1]}];
+  data.forEach(function(d){var mx=Math.max.apply(null,d.trend);if(mx===0)mx=1;var spark=d.trend.map(function(v){return'<div class="spb" style="height:'+Math.max(v/mx*100,4)+'%;background:'+(d.side==='fr'?'var(--frl)':'var(--mal)')+';opacity:'+(.35+v/mx*.65)+'"></div>'}).join('');var c=document.createElement('div');c.className='card '+(d.side==='fr'?'ft':'mt')+' reveal';c.innerHTML='<div style="font-size:16px;font-weight:800;text-align:center;color:'+(d.side==='fr'?'var(--frl)':'var(--mal)')+'">'+d.label+'</div><div class="ss">Goals scored trend (per game)</div><div class="sparkline">'+spark+'</div>'+d.matches.map(function(m){return'<div class="m-row"><div class="rb '+(m[3]==='W'?'w':'d')+'">'+m[3]+'</div><div class="rd">'+m[0]+'</div><div class="rc">'+m[1]+'</div><div class="rm">'+m[2]+'</div></div>'}).join('')+'<div style="text-align:center;margin-top:8px;font-size:9.5px;font-weight:700;color:'+(d.side==='fr'?'var(--frl)':'var(--mal)')+'">'+d.sum+'</div>';fg.appendChild(c)});
+})();
+
+// ═══════════ BUILD: History ═══════════
+(function(){
+  var hg=document.getElementById('hist-g');
+  var data=[{side:'fr',label:'FRANCE',trophies:[['WC Titles','2','var(--frl)'],['WC Finals','4','var(--frl)'],['Euro Titles','2','#88AAFF'],['WC Apps','16','#aaa']],items:[['2x','World Cup Champion','1998, 2018','var(--frl)'],['2x','World Cup Runner-up','2006, 2022','#ccc'],['2x','World Cup 3rd Place','1958, 1986','#CD7F32'],['2x','European Champion','1984, 2000','var(--fr)'],['1x','UEFA Nations League','2021','#88AAFF'],['1x','Confederations Cup','2001, 2003','var(--g)'],['1x','Olympic Gold','1984','var(--g)'],['#1','FIFA World Ranking','Current (2026)','var(--g)']]},{side:'ma',label:'MOROCCO',trophies:[['AFCON Titles','1','var(--mal)'],['AFCON Finals','3','var(--mal)'],['Afri. Champ.','2','var(--mal)'],['WC Apps','7','#aaa']],items:[['1x','Africa Cup of Nations','1976','var(--mal)'],['2x','AFCON Runner-up','2004, 2025','#ccc'],['2x','African Nations Champ.','2018, 2020','var(--ma)'],['1x','WC Semi-Finalist','2022 — 4th Place','#CD7F32'],['1st','African WC SF','2022 — Historic first','var(--g)'],['1st','Arab Cup Winner','2012','var(--g)'],['#14','FIFA Ranking','Best in history','#88AAFF'],['2x','WC QF','2022, 2026','var(--g)']]}];
+  data.forEach(function(d){var trHTML=d.trophies.map(function(t){return'<div class="trophy-i"><div class="tn" style="color:'+t[2]+'">'+t[1]+'</div><div class="tl">'+t[0]+'</div></div>'}).join('');var c=document.createElement('div');c.className='card '+(d.side==='fr'?'ft':'mt')+' reveal';c.innerHTML='<div style="font-size:17px;font-weight:800;text-align:center;color:'+(d.side==='fr'?'var(--frl)':'var(--mal)')+'">'+d.label+'</div><div class="ss">All-time honors</div><div class="trophy-g">'+trHTML+'</div>'+d.items.map(function(h){return'<div class="h-row"><div class="hc">'+h[0]+'</div><div><div class="ht" style="color:'+h[3]+'">'+h[1]+'</div><div class="hd">'+h[2]+'</div></div></div>'}).join('');hg.appendChild(c)});
+
+  // WC Timeline
+  document.getElementById('fr-tl').innerHTML=[{y:1958,r:'3rd Place',c:'#CD7F32'},{y:1982,r:'4th Place',c:'#aaa'},{y:1986,r:'3rd Place',c:'#CD7F32'},{y:1998,r:'Champion',c:'var(--frl)'},{y:2006,r:'Runner-up',c:'#ccc'},{y:2018,r:'Champion',c:'var(--frl)'},{y:2022,r:'Runner-up',c:'#ccc'}].map(function(w){return'<div class="tl-i"><b style="color:var(--g)">'+w.y+'</b> <b style="color:'+w.c+'">'+w.r+'</b></div>'}).join('');
+  document.getElementById('ma-tl').innerHTML=[{y:1970,r:'Group Stage',c:'#aaa'},{y:1986,r:'Round of 16',c:'#aaa'},{y:1994,r:'Group Stage',c:'#aaa'},{y:1998,r:'Group Stage',c:'#aaa'},{y:2018,r:'Group Stage',c:'#aaa'},{y:2022,r:'Semi-Final',c:'var(--mal)'},{y:2026,r:'Quarter-Final*',c:'var(--g)'}].map(function(w){return'<div class="tl-i"><b style="color:var(--g)">'+w.y+'</b> <b style="color:'+w.c+'">'+w.r+'</b></div>'}).join('');
+})();
+
+// ═══════════ BUILD: Poll ═══════════
+(function(){
+  var pv=JSON.parse(localStorage.getItem('wc26poll_v3')||'{"fr":0,"draw":0,"ma":0}');
+  function tot(){return pv.fr+pv.draw+pv.ma}
+  function pct(v){return tot()===0?0:Math.round(v/tot()*100)}
+  function updateUI(){
+    var el=document.getElementById('poll-res'),te=document.getElementById('poll-total');
+    if(!el||!te)return;
+    if(tot()>0){el.style.display='block';el.innerHTML='<div class="prow-bar"><div class="prow-name">France</div><div class="prow-bw"><div class="prow-b f" data-w="'+pct(pv.fr)+'"></div></div><div class="prow-pct" style="color:var(--frl)">'+pct(pv.fr)+'%</div></div><div class="prow-bar"><div class="prow-name">Draw / ET</div><div class="prow-bw"><div class="prow-b d" data-w="'+pct(pv.draw)+'"></div></div><div class="prow-pct" style="color:var(--g)">'+pct(pv.draw)+'%</div></div><div class="prow-bar"><div class="prow-name">Morocco</div><div class="prow-bw"><div class="prow-b m" data-w="'+pct(pv.ma)+'"></div></div><div class="prow-pct" style="color:var(--mal)">'+pct(pv.ma)+'%</div></div>';setTimeout(function(){el.querySelectorAll('[data-w]').forEach(function(e){e.style.width=e.dataset.w+'%'})},50)}
+    te.textContent=tot()}
+  updateUI();
+  document.querySelectorAll('#poll-opts .poll-o').forEach(function(opt){opt.addEventListener('click',function(){var v=this.dataset.v;pv[v]++;localStorage.setItem('wc26poll_v3',JSON.stringify(pv));updateUI();var msgs={fr:'Allez les Bleus!',draw:'Going the distance...',ma:'Dima Maghrib!'};var icons={fr:'\u{1F1EB}\u{1F1F7}',draw:'\u{1F91D}',ma:'\u{1F1F2}\u{1F1E6}'};document.getElementById('poll-msg').innerHTML=msgs[v]+'<br><span style="font-size:11px;color:var(--s)">Vote recorded!</span>';document.getElementById('poll-icon').textContent=icons[v];toast('Vote recorded!');this.classList.add('sel');setTimeout(function(){this.classList.remove('sel')}.bind(this),1500)})});
+
+  // Facts
+  var fg=document.getElementById('facts-g');
+  [{icon:'\u{1F3DF}',title:'Gillette Stadium',desc:'Capacity: 65,878<br>Home of New England Patriots<br>Hosted 1994 & 2026 World Cup',c:''},{icon:'\u{1F454}',title:'Last Dance',desc:'Deschamps\' final tournament<br>as France head coach<br>after 14 years in charge',c:'ft'},{icon:'\u{1F30D}',title:'African Pride',desc:'Morocco is the FIRST African nation<br>to reach back-to-back<br>World Cup quarter-finals',c:'mt'}].forEach(function(f){var d=document.createElement('div');d.className='card '+(f.c||'');d.innerHTML='<div style="font-size:28px;text-align:center;margin-bottom:4px">'+f.icon+'</div><div class="st" style="font-size:12px">'+f.title+'</div><div style="font-size:9.5px;color:var(--s);text-align:center;line-height:1.6">'+f.desc+'</div>';fg.appendChild(d)});
+})();
+
+// ═══════════ Radar Chart ═══════════
+(function(){
+  var rg=document.getElementById('radar-g');if(!rg)return;
+  var L=['Attack','Midfield','Defence','Experience','Form','Depth'],fV=[92,88,85,95,90,93],mV=[75,72,82,60,78,65],N=6;
+  var ang=[];for(var i=0;i<N;i++)ang.push(i*Math.PI*2/N-Math.PI/2);
+  function pts(vals,sc){sc=sc||1;var p=[];for(var i=0;i<vals.length;i++){var r=vals[i]*1.15*sc;p.push((Math.cos(ang[i])*r)+','+(Math.sin(ang[i])*r))}return p.join(' ')}
+  [30,60,90,120].forEach(function(r){rg.innerHTML+='<polygon points="'+pts([r/1.15,r/1.15,r/1.15,r/1.15,r/1.15,r/1.15])+'" fill="none" stroke="rgba(255,255,255,'+(r===120?'.08':'.05')+')" stroke-width="1"/>'});
+  ang.forEach(function(a){rg.innerHTML+='<line x1="0" y1="0" x2="'+(Math.cos(a)*135)+'" y2="'+(Math.sin(a)*135)+'" stroke="rgba(255,255,255,.03)"/>'});
+  rg.innerHTML+='<polygon points="'+pts(fV)+'" fill="rgba(31,90,200,.18)" stroke="#6098F0" stroke-width="2.5" stroke-linejoin="round"/>';
+  fV.forEach(function(v,i){rg.innerHTML+='<circle cx="'+(Math.cos(ang[i])*v*1.15)+'" cy="'+(Math.sin(ang[i])*v*1.15)+'" r="4" fill="#fff" stroke="#6098F0" stroke-width="2" style="cursor:pointer" data-s="fr" data-v="'+v+'" data-l="'+L[i]+'"/>'});
+  rg.innerHTML+='<polygon points="'+pts(mV)+'" fill="rgba(193,39,45,.15)" stroke="#F06070" stroke-width="2.5" stroke-linejoin="round"/>';
+  mV.forEach(function(v,i){rg.innerHTML+='<circle cx="'+(Math.cos(ang[i])*v*1.15)+'" cy="'+(Math.sin(ang[i])*v*1.15)+'" r="4" fill="#fff" stroke="#F06070" stroke-width="2" style="cursor:pointer" data-s="ma" data-v="'+v+'" data-l="'+L[i]+'"/>'});
+  L.forEach(function(l,i){rg.innerHTML+='<text x="'+(Math.cos(ang[i])*145)+'" y="'+(Math.sin(ang[i])*145+4)+'" text-anchor="middle" fill="#889" font-size="10">'+l+'</text>'});
+  var tip=document.createElement('div');tip.style.cssText='position:fixed;z-index:999;pointer-events:none;opacity:0;background:#1c2440;border:1px solid #252d40;border-radius:6px;padding:5px 10px;font-size:10px;color:#EAECF0;white-space:nowrap;transition:opacity .15s';document.body.appendChild(tip);
+  rg.querySelectorAll('circle[data-s]').forEach(function(c){c.addEventListener('mouseenter',function(){tip.textContent=c.dataset.l+': '+c.dataset.v+'/100 ('+(c.dataset.s==='fr'?'France':'Morocco')+')';tip.style.opacity='1'});c.addEventListener('mousemove',function(e){tip.style.left=e.clientX+12+'px';tip.style.top=e.clientY-30+'px'});c.addEventListener('mouseleave',function(){tip.style.opacity='0'})});
+})();
+</script>
+</body>
+</html>
